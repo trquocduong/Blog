@@ -1,0 +1,63 @@
+/* body {
+  font-family: "Segoe UI", sans-serif;
+  background: #f9f9f9;
+}
+
+.btn-outline-primary {
+  border: 2px solid var(--main-color);
+  color: var(--main-color);
+  padding: 6px 12px;
+  border-radius: 4px;
+  background: none;
+  text-decoration: none;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--main-color);
+  color: white;
+} */
+body {
+  font-family: "Segoe UI", sans-serif;
+}
+.navbar {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.category-card img {
+  height: 200px;
+  object-fit: cover;
+}
+.post-card img {
+  height: 180px;
+  object-fit: cover;
+}
+@keyframes marquee {
+  0% {
+    left: 100%;
+  }
+  100% {
+    left: -100%;
+  }
+}
+
+.danh-muc-hover {
+  position: relative;
+}
+
+.mega-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 999;
+  width: 800px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.danh-muc-hover:hover .mega-menu {
+  display: block;
+}
+
+.mega-menu a:hover {
+  color: #f39c12;
+}

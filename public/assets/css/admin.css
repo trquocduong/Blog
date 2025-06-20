@@ -1,0 +1,36 @@
+ body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .admin-wrapper {
+      display: flex;
+      flex: 1;
+      height: 100%;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #343a40;
+      color: white;
+      flex-shrink: 0;
+    }
+    .sidebar .nav-link {
+      color: #adb5bd;
+    }
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+      background-color: #495057;
+      color: white;
+    }
+    .main-content {
+      flex-grow: 1;
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    .header {
+      background-color: white;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 20px;
+    }

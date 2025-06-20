@@ -1,0 +1,6 @@
+RewriteEngine On
+
+# Nếu không phải là file hoặc thư mục thật thì chuyển hướng tới public/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /blog/public/$1 [L]

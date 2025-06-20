@@ -1,0 +1,16 @@
+<?php
+header('Content-Type: application/xml');
+require_once '../app/Models/Post.php';
+$postModel = new Post();
+$posts = $postModel->all();
+
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<?php foreach ($posts as $post): ?>
+    <url>
+        <loc><?= 'https://yourdomain.com/bai-viet/' . $post['slug'] ?></loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+    </url>
+<?php endforeach; ?>
+</urlset>
