@@ -17,4 +17,6 @@ Route::get('/register','Client/AuthController@register');//register
 
 Route::get('/detail','Client/PostController@detail');//register
 
+Route::get('/profile','Client/PostController@profile');//profile
+Route::get('/profile_post','Client/PostController@profile_post');//profile_post
 
