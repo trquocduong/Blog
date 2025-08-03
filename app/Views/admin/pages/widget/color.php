@@ -1,11 +1,12 @@
 <?php
+clearstatcache();
 $title = "Quản trị giao diện";
 $configPath = __DIR__ . '/../../../../../theme.json';  // Đảm bảo đường dẫn đúng
 $config = json_decode(file_get_contents($configPath), true);
 if (is_array($config) && isset($config['main_color']) && preg_match('/^#[a-fA-F0-9]{6}$/', $config['main_color'])) {
-    $mainColor = $config['main_color'];
+  $mainColor = $config['main_color'];
 } else {
-    $mainColor = '#007bff';
+  $mainColor = '#007bff';
 }
 ob_start();
 ?>
@@ -17,5 +18,5 @@ ob_start();
 </form>
 <?php
 $admin = ob_get_clean();
-include __DIR__ . '/../../main.php';  
+include __DIR__ . '/../../main.php';
 ?>
