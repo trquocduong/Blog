@@ -1,19 +1,21 @@
 <?php
 class UsersModel extends Model
 {
-    public function register($email, $phone, $password)
+    public function register($email, $phone, $role, $password)
     {
-        $sql = "INSERT INTO users (email,phone,password) VALUE(?,?,?)";
+        $img = '/uploads/default.png';
+        $sql = "INSERT INTO users (email, phone, role,password, img) VALUES (?, ?, ?, ?,?)";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$email, $phone, password_hash($password, PASSWORD_DEFAULT)]);
+        return $stmt->execute([$email, $phone, $role, password_hash($password, PASSWORD_DEFAULT), $img]);
     }
-    public function findByEmail(string $email): ?array
+
+    public function findByEmail($email)
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE email=?");
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$email]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result ?: null;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
     public function index()
     {
         return $this->db->query("SELECT * FROM users ORDER BY id ASC")->fetchAll(PDO::FETCH_ASSOC);
@@ -30,20 +32,20 @@ class UsersModel extends Model
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    public function create($name, $email, $phone, $password, $hide, $role)
+    public function create($img, $name, $email, $phone, $password, $hide, $role)
     {
-        $stmt = $this->db->prepare("INSERT INTO users (name,email,phone,password,hide,role) VALUE (?,?,?,?,?,?)");
-        return $stmt->execute([$name, $email, $phone, $password, $hide, $role]);
+        $stmt = $this->db->prepare("INSERT INTO users (img,name,email,phone,password,hide,role) VALUE (?,?,?,?,?,?,?)");
+        return $stmt->execute([$img, $name, $email, $phone, $password, $hide, $role]);
     }
-    public function update($id, $name, $email, $phone, $password, $hide, $role)
+    public function update($id, $img, $name, $email, $phone, $password, $hide, $role)
     {
         if ($password) {
             // Có thay đổi mật khẩu
-            $stmt = $this->db->prepare("UPDATE users SET name=?, email=?, phone=?, password=?, hide=?, role=? WHERE id=?");
-            return $stmt->execute([$name, $email, $phone, $password, $hide, $role, $id]);
+            $stmt = $this->db->prepare("UPDATE users SET img=? ,name=?, email=?, phone=?, password=?, hide=?, role=? WHERE id=?");
+            return $stmt->execute([$img, $name, $email, $phone, $password, $hide, $role, $id]);
         } else {
-            $stmt = $this->db->prepare("UPDATE users SET name=?, email=?, phone=?, hide=?, role=? WHERE id=?");
-            return $stmt->execute([$name, $email, $phone, $hide, $role, $id]);
+            $stmt = $this->db->prepare("UPDATE users SET img=?, name=?, email=?, phone=?, hide=?, role=?  WHERE id=?");
+            return $stmt->execute([$img, $name, $email, $phone, $hide, $role, $id]);
         }
     }
     public function delete($id)
@@ -94,7 +96,7 @@ class UsersModel extends Model
     }
     public function getAllAdminsExcept($id)
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE role = 0 AND id != ?");
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE role = 0 AND id != ? ORDER BY (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(last_active) <= 60) DESC, name ASC");
         $stmt->execute([$id]);
         return $stmt->fetchAll();
     }
@@ -103,5 +105,22 @@ class UsersModel extends Model
         $time = $time ?? date('Y-m-d H:i:s');
         $stmt = $this->db->prepare("UPDATE users SET last_active = ? WHERE id = ?");
         $stmt->execute([$time, $userId]);
+    }
+    public function updateprofile($id, $img, $name, $email, $phone)
+    {
+        $stmt = $this->db->prepare("
+        UPDATE users 
+        SET img = ?, name = ?, email = ?, phone = ?
+        WHERE id = ?
+    ");
+        return $stmt->execute([$img, $name, $email, $phone, $id]);
+    }
+    public function repassword($id, $password)
+    {
+        if (!$password) {
+            return false;
+        }
+        $stmt = $this->db->prepare("UPDATE users SET password=? WHERE id=?");
+        return $stmt->execute([password_hash($password, PASSWORD_DEFAULT), $id]);
     }
 }

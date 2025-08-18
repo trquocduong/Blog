@@ -30,6 +30,12 @@ class PageModel extends Model
         $stmt = $this->db->prepare("DELETE FROM pages WHERE id = ?");
         $stmt->execute([$id]);
     }
+    public function filterByHide($hide)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM pages WHERE hide = ?");
+        $stmt->execute([$hide]);
+        return $stmt->fetchAll();
+    }
 
     public function findBySlug($slug)
     {
@@ -43,12 +49,39 @@ class PageModel extends Model
         $stmt->execute(["%$keyword%"]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function sortByCreatedAtDesc()
+    public function getPaginatedPermissions($limit, $offset)
     {
-        return $this->db->query("SELECT * FROM pages ORDER BY created_at DESC")->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM pages LIMIT :limit OFFSET :offset";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function sortByCreatedAtAsc()
+
+    public function countPermissions()
     {
-        return $this->db->query("SELECT * FROM pages ORDER BY created_at ASC")->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT COUNT(*) FROM pages";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchColumn();
+    }
+
+    public function getFilteredPaginatedPermissions($hide, $limit, $offset)
+    {
+        $sql = "SELECT * FROM pages WHERE hide = :hide LIMIT :limit OFFSET :offset";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':hide', $hide, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countFiltered($hide)
+    {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM pages WHERE hide = :hide");
+        $stmt->bindValue(':hide', $hide, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchColumn();
     }
 }

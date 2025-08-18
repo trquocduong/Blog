@@ -14,14 +14,20 @@ class TagsController extends Controller
             header('Location: /admin');
             exit;
         } else {
-            $hide = isset($_GET['hide']) ? $_GET['hide'] : null;
+            $limit = 5;
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $page = $page < 1 ? 1 : $page;
 
-            if ($hide === '' || $hide === null) {
-                $tags = $this->tags->show();
+            $offset = ($page - 1) * $limit;
+            $filterHide = isset($_GET['hide']) ? (int)$_GET['hide'] : null;
+            if ($filterHide === 0 || $filterHide === 1 || $filterHide === 2) {
+                $tags = $this->tags->getFilteredPaginatedPermissions($filterHide, $limit, $offset);
+                $totalRecords = $this->tags->countFiltered($filterHide);
             } else {
-                $tags = $this->tags->filterByHide($hide);
+                $tags = $this->tags->getPaginatedPermissions($limit, $offset);
+                $totalRecords = $this->tags->countPermissions();
             }
-
+            $totalPages = ceil($totalRecords / $limit);
             $total = count($this->tags->show());
             $totalVisible = count($this->tags->filterByHide(0));
             $totalHidden = count($this->tags->filterByHide(1));
@@ -29,6 +35,8 @@ class TagsController extends Controller
             $this->view('admin/pages/tags/index', [
                 'tags' => $tags,
                 'total' => $total,
+                'currentPage' => $page,
+                'totalPages' => $totalPages,
                 'totalVisible' => $totalVisible,
                 'totalHidden' => $totalHidden
             ]);

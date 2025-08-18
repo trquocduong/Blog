@@ -10,9 +10,9 @@ class AuthController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $email = $_POST['email'] ?? '';
             $phone = $_POST['phone'] ?? '';
+            $role = $_POST['role'] ?? '';
             $password = $_POST['password'] ?? '';
             $repassword = $_POST['repassword'] ?? '';
-
             if ($password !== $repassword) {
                 $error = "Mật khẩu không khớp!";
                 include __DIR__ . "/../../Views/client/auth/register.php";
@@ -23,7 +23,7 @@ class AuthController extends Controller
             if ($userModel->findByEmail($email)) {
                 $error = "❌ Email đã tồn tại!";
             } else {
-                $userModel->register($email, $phone, $password);
+                $userModel->register($email, $phone, $role, $password);
                 header("Location: /login");
                 exit;
             }

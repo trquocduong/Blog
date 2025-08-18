@@ -60,6 +60,9 @@ $mainColor = $config["main_color"] ?? '#007bff';
             <input type="text" id="form2Example47" class="form-control form-control-lg" style="font-size: 1rem;" name="phone" placeholder="Nhập số điện thoại của bạn" />
           </div>
           <div data-mdb-input-init class="form-outline mb-3">
+            <input type="hidden" id="form2Example47" class="form-control form-control-lg" style="font-size: 1rem;" name="role" value="1" />
+          </div>
+          <div data-mdb-input-init class="form-outline mb-3">
             <label class="form-label" for="form2Example37">Mật khẩu</label>
             <input type="password" id="form2Example37" class="form-control form-control-lg" style="font-size: 1rem;" name="password" placeholder="Hãy tạo mật khẩu riêng của bạn" />
           </div>

@@ -13,9 +13,30 @@ class PagesController extends Controller
             header('Location: /admin');
             exit;
         } else {
-            $pages = $this->pages->show();
+            $limit = 5;
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $page = $page < 1 ? 1 : $page;
+
+            $offset = ($page - 1) * $limit;
+            $filterHide = isset($_GET['hide']) ? (int)$_GET['hide'] : null;
+            if ($filterHide === 0 || $filterHide === 1 || $filterHide === 2) {
+                $pages = $this->pages->getFilteredPaginatedPermissions($filterHide, $limit, $offset);
+                $totalRecords = $this->pages->countFiltered($filterHide);
+            } else {
+                $pages = $this->pages->getPaginatedPermissions($limit, $offset);
+                $totalRecords = $this->pages->countPermissions();
+            }
+            $totalPages = ceil($totalRecords / $limit);
+            $total = count($this->pages->show());
+            $totalVisible = count($this->pages->filterByHide(0));
+            $totalHidden = count($this->pages->filterByHide(1));
             $this->view('admin/pages/page/index', [
-                'pages' => $pages
+                'pages' => $pages,
+                'total' => $total,
+                'currentPage' => $page,
+                'totalPages' => $totalPages,
+                'totalVisible' => $totalVisible,
+                'totalHidden' => $totalHidden
             ]);
         }
     }
@@ -56,11 +77,6 @@ class PagesController extends Controller
     {
         $slug = $_GET['slug'];
         $pages = $this->pages->find($slug);
-        //     if (!$page || $page['hide'] == 1) {
-        //     http_response_code(404);
-        //     echo "Trang không tồn tại hoặc đã bị ẩn.";
-        //     exit;
-        // }
         $this->view('admin/pages/page/detail', ['pages' => $pages]);
     }
     public function edit()

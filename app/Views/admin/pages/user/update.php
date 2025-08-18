@@ -15,7 +15,7 @@ ob_start();
     </div>
 </div>
 <main class="main">
-    <form action="/user_update?id=<?= $user['id'] ?>" method="post">
+    <form action="/user_update?id=<?= $user['id'] ?>" method="post" enctype="multipart/form-data">
         <div class="row gx-4">
             <div class="col-8">
                 <div class="card p-3 shadow-sm">
@@ -40,6 +40,7 @@ ob_start();
                         <div id="emailHelp" class="form-text">Mật khẩu đăng nhập</div>
                     </div>
                 </div>
+                <button type="submit" class="btn btn-primary mt-3 shadow-lg">Sửa</button>
             </div>
             <div class="col-4">
                 <div class="card p-3 shadow-sm">
@@ -64,7 +65,14 @@ ob_start();
                             <div id="emailHelp" class="form-text">Vai trò tài khoản.</div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-3 shadow-lg">Sửa</button>
+                    <div class="card p-3 shadow-lg mt-3 mb-3">
+                        <label for="exampleInputRole" class="form-label">Ảnh đại diện</label>
+                        <input type="file" name="img" accept="image/*">
+                        <div class="text-center">
+                            <img src="<?= htmlspecialchars($user['img']) ?>" width="100" height="100" alt="Avatar" class="mt-2 shadow-lg text-center">
+                        </div>
+                    </div>
+
             </div>
         <?php endif ?>
     </form>

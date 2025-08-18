@@ -15,7 +15,7 @@ ob_start();
     </div>
 </div>
 <main class="main">
-    <form action="/user_store" method="post">
+    <form action="/user_store" method="post" enctype="multipart/form-data">
         <div class="row gx-4">
             <div class="col-8">
                 <div class="card p-3 shadow-sm">
@@ -65,6 +65,11 @@ ob_start();
                         </div>
                     </div>
                 <?php endif; ?>
+                <div class="card p-3 shadow-lg mt-3 mb-3">
+                    <label for="exampleInputRole" class="form-label">Ảnh đại diện</label>
+                    <input type="file" name="img" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary mt-3 shadow-lg">Thêm</button>
     </form>
     </div>
 </main>

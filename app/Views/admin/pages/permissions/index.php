@@ -112,7 +112,7 @@ include __DIR__ . '/../../partials/toast.php';
                     </tbody>
                 </table>
 
-                <a href="/admin/permissions/manage" style="display:inline-block;margin-top:20px">→ Quản lý phân quyền người dùng</a>
+                <a href="/permissions_index" style="display:inline-block;margin-top:20px">→ Quản lý phân quyền người dùng</a>
 
                 <div class="d-flex justify-content-end mt-4">
                     <nav aria-label="Page navigation">

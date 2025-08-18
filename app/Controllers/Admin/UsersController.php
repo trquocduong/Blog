@@ -68,11 +68,22 @@ class UsersController extends Controller
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $hide = $_POST['hide'] ?? '';
             $role = $_POST['role'] ?? '';
+            $img = null;
+            if (isset($_FILES['img']) && $_FILES['img']['error'] == 0) {
+                $targetDir = __DIR__ . '/../../../uploads/';
+                if (!file_exists($targetDir)) {
+                    mkdir($targetDir, 0777, true);
+                }
+                $fileName = time() . '_' . basename($_FILES['img']['name']);
+                $targetFile = $targetDir . $fileName;
+                move_uploaded_file($_FILES['img']['tmp_name'], $targetFile);
+                $img = '/uploads/' . $fileName;
+            }
             if ($this->user->findByEmail($email)) {
                 $_SESSION['toast_error'] = 'Email của bạn đã tồn tại ở tài khoản khác !';
                 header("Location: /create_user");
             } else {
-                $this->user->create($name, $email, $phone, $password, $hide, $role);
+                $this->user->create($img, $name, $email, $phone, $password, $hide, $role);
                 $_SESSION['toast'] = 'Thêm tài khoản thành công.';
                 header("Location: /users");
                 exit;
@@ -103,7 +114,6 @@ class UsersController extends Controller
     }
     public function update()
     {
-        session_start();
         $id = $_GET['id'];
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'];
@@ -112,8 +122,33 @@ class UsersController extends Controller
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $hide = $_POST['hide'];
             $role = $_POST['role'];
+            $oldimg = $_POST['old_img'] ?? null;
+            $img = $oldimg;
+            if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
+                $uploadDir = __DIR__ . '/../../../uploads/';
+                if (!file_exists($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+                // kiểm tra name của ảnh 
+                $originalName = pathinfo($_FILES['img']['name'], PATHINFO_FILENAME);
+                $originalName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $originalName);
+                $extension = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
+                $fileName = time() . '_' . $originalName . '.' . $extension;
+
+                $targetFile = $uploadDir . $fileName;
+
+                if (move_uploaded_file($_FILES['img']['tmp_name'], $targetFile)) {
+                    if (!empty($oldimg)) {
+                        $oldPath = __DIR__ . '/../../../uploads/' . $oldimg;
+                        if (file_exists($oldPath)) {
+                            unlink($oldPath);
+                        }
+                    }
+                    $img = '/uploads/' . $fileName;
+                }
+            }
             $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
-            $this->user->update($id, $name, $email, $phone, $password, $hide, $role);
+            $this->user->update($id, $img, $name, $email, $phone, $password, $hide, $role);
             $_SESSION['toast'] = 'Thay đổi tài khoản thành công.';
             header("Location: /users");
             exit;

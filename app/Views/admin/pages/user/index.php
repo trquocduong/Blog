@@ -16,8 +16,6 @@ include __DIR__ . '/../../partials/toast.php';
             </div>
         </div>
     </div>
-
-
 </div>
 <main class="main">
     <div class="row">
@@ -74,11 +72,11 @@ include __DIR__ . '/../../partials/toast.php';
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Ảnh</th>
                             <th>Email</th>
                             <th>SĐT</th>
                             <th>Mật khẩu</th>
                             <th>Trạng thái</th>
-                            <th>Vai trò</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -88,6 +86,8 @@ include __DIR__ . '/../../partials/toast.php';
                     foreach ($users as $item) : ?>
                         <tbody>
                             <td><?= $i++ ?></td>
+                            <td><img src="<?= htmlspecialchars($item['img']) ?>" width="50" height="50" alt="Avatar" style="border-radius: 20%;">
+                            </td>
                             <td><?= $item['email'] ?></td>
                             <td><?= $item['phone'] ?> </td>
                             <td>***</td>
@@ -98,13 +98,6 @@ include __DIR__ . '/../../partials/toast.php';
                                     <span class="badge bg-warning">Chờ duyệt</span>
                                 <?php else: ?>
                                     <span class="badge bg-danger">Bị khoá</span>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <?php if ($item['role'] === "0" || $item['role'] === 0): ?>
-                                    <span class="badge bg-success">Admin</span>
-                                <?php else: ?>
-                                    <span class="badge bg-warning">Khách hàng</span>
                                 <?php endif; ?>
                             </td>
                             <td class="text-center">

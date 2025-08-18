@@ -28,15 +28,17 @@
     </div>
 
     <div class="d-flex align-items-center me-3">
-      <img src="https://randomuser.me/api/portraits/women/44.jpg" class="rounded-circle me-2" width="40" height="40">
-      <div class="user-info">
-        <span class="fw-semibold">Alina Mclourd</span>
-        <span class="text-muted small">VP People Manager</span>
-      </div>
-      <i class="bi bi-caret-down-fill ms-2 text-muted"></i>
+      <?php if (isset($_SESSION['user']['id'])): ?>
+        <img src="<?= $_SESSION['user']['img'] ?>" class="rounded-circle me-2" width="40" height="40">
+        <div class="user-info">
+          <span class="fw-semibold"><?= $_SESSION['user']['name'] ?></span>
+          <span class="text-muted small">Admin Manager</span>
+        </div>
     </div>
+  <?php endif; ?>
 
-    <button class="btn btn-primary me-2 rounded"><i class="bi bi-calendar-fill"></i></button>
-    <button class="btn btn-link text-dark fs-4"><i class="bi bi-list"></i></button>
+
+  <button class="btn btn-danger me-2 rounded"> <a href="/" class="nav-link"><i class="fa-solid fa-house"></i> topmeo.vn</a></button>
+  <!-- <button class="btn btn-link text-dark fs-4"><i class="bi bi-list"></i></button> -->
   </div>
 </nav>

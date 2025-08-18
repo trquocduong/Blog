@@ -1,28 +1,3 @@
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quốc Dương Blog</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet" />
-  <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    rel="stylesheet" />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer" />
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-  <!-- AOS CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
-
-</head>
-
 <body>
   <div
     class="form-control bg-light mb-2 overflow-hidden position-relative"
@@ -53,21 +28,12 @@
           </a>
           <div class="mega-menu bg-white p-4 shadow rounded">
             <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-1">
-              <div class="col me-1 badge text-bg-success text-wrap">
-                This text should wrap.
-              </div>
-              <div class="col me-1 badge text-bg-success text-wrap">
-                This text should wrap.
-              </div>
-              <div class="col me-1 badge text-bg-success text-wrap">
-                This text should wrap.
-              </div>
-              <div class="col me-1 badge text-bg-success text-wrap">
-                This text should wrap.
-              </div>
-              <div class="col me-1 badge text-bg-success text-wrap">
-                This text should wrap.
-              </div>
+              <?php foreach ($category as $item) :
+              ?>
+                <div class="col me-1 badge text-bg-success text-wrap">
+                  <?= $item['name'] ?>
+                </div>
+              <?php endforeach ?>
             </div>
           </div>
         </li>
@@ -79,12 +45,15 @@
               <input
                 type="text"
                 class="form-control"
-                placeholder="Nhận sản phẩm tìm kiếm ..." />
+                placeholder="Tìm kiếm bài viết mới ..." />
             </div>
             <div class="mt-2" style="font-size: 13px">
               <p class="text-muted">
                 🔍 Tìm kiếm nhiều nhất:
-                <span class="badge" style="background-color: var(--main-color)">Thiết kế web trọn gói</span>
+                <?php foreach (array_slice($category, 0, 3) as $item):
+                ?>
+                  <span class="badge" style="background-color: var(--main-color)"> <?= $item['name'] ?></span>
+                <?php endforeach ?>
               </p>
             </div>
           </div>
@@ -93,20 +62,41 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav align-items-center ms-auto">
           <li class="nav-item me-2 ">
-            <button class="btn fw-bold" href="#" style="background-color: var(--main-color)
-">
-              <i class="fa-solid fa-plus"></i>
+            <button class="btn fw-bold" href="" style="background-color: var(--main-color)">
+              <a href="/create_post" class="nav-link"><i class="fa-solid fa-plus"></i></a>
             </button>
           </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle d-flex align-items-center"
-              href="/login"
-              role="button">
-              <i class="fa-regular fa-circle-user fs-4 me-1"></i>
-              <span class="d-none d-md-inline"> Đăng Nhập</span>
-            </a>
-          </li>
+          <?php if (!empty($_SESSION['user'])) { ?>
+            <?php if (isset($_SESSION['user']['id'])): ?>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle d-flex align-items-center"
+                  href="/profile?id=<?= $_SESSION['user']['id'] ?>"
+                  role="button">
+                  <img src="<?= $_SESSION['user']['img'] ?>" class="rounded-circle me-2" width="40" height="40">
+                  <span class="d-none d-md-inline"><?= $_SESSION['user']['name'] ?>
+                    <br>
+                    <small class="d-none d-md-inline">
+                      <?php if ($_SESSION['user']['role'] == 1) { ?>
+                        Khách
+                      <?php } else { ?>
+                      <?php } ?>
+                      Admin
+                    </small>
+                </a>
+              </li>
+            <?php endif; ?>
+          <?php } else { ?>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle d-flex align-items-center"
+                href="/login"
+                role="button">
+                <i class="fa-regular fa-circle-user fs-4 me-1"></i>
+                <span class="d-none d-md-inline"> Đăng Nhập</span>
+              </a>
+            </li>
+          <?php } ?>
         </ul>
       </div>
     </div>
@@ -123,7 +113,6 @@
         <i class="fa-solid fa-bars fs-4"></i>
       </button>
     </div>
-
     <div
       class="offcanvas offcanvas-start"
       tabindex="-1"
@@ -136,7 +125,6 @@
           data-bs-dismiss="offcanvas"></button>
       </div>
       <div class="offcanvas-body">
-        <!-- Tìm kiếm -->
         <div class="mb-3">
           <input
             type="text"
@@ -147,69 +135,18 @@
           🔍 Tìm kiếm nhiều nhất:
           <span class="badge bg-secondary">Thiết kế web trọn gói</span>
         </div>
-
-        <!-- Danh mục -->
         <div class="mb-3">
           <strong class="d-block mb-2">Danh mục</strong>
           <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
             <div class="col badge text-bg-success text-wrap">
               This text should wrap.
             </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Cho thuê loa kéo</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Cửa Lưới Chống Muỗi</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Vách Ngăn Tổ Ong</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Trang Trí Sinh Nhật</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Điện tử</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Chống cháy</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Cách nhiệt</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Mỹ Phẩm</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Thiết Kế Nội Thất</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Xưởng balo - túi xách</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Điện thoại</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Máy tính, laptop</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Đặc Sản</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Tp Hồ Chí Minh</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Thể Thao</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Nhà hàng</a>
-            </div>
-            <div class="col">
-              <a href="#" class="text-decoration-none text-dark">Sắt Mỹ Nghệ</a>
-            </div>
+            <?php foreach ($category as $item) :
+            ?>
+              <a href="#" class="text-decoration-none text-dark"><?= $item['name'] ?></a>
+            <?php endforeach ?>
           </div>
         </div>
-
-        <!-- Tài khoản -->
         <div class="border-top pt-3">
           <a href="#" class="d-flex align-items-center gap-2 mb-2">
             <i class="fa-regular fa-circle-user fs-5"></i>
