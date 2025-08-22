@@ -2,13 +2,14 @@
 
 class ProfileController extends Controller
 {
-    private $category, $tags, $users;
+    private $category, $tags, $users, $post;
 
     public function __construct()
     {
         $this->category = new CategoryModel();
         $this->tags = new TagsModel();
         $this->users = new UsersModel();
+        $this->post = new PostModel();
     }
 
     public function profile()
@@ -22,7 +23,12 @@ class ProfileController extends Controller
 
     public function profile_post()
     {
-        $this->view('client/profile/profile_post');
+        $id = $_GET['id'];
+        $category = $this->category->show();
+        $tags = $this->tags->show();
+        $users = $this->users->detail($id);
+        $post = $this->post->list_post($id);
+        $this->view('client/profile/profile_post', ['category' => $category, 'tags' => $tags, 'users' => $users, 'post' => $post]);
     }
 
     public function update()
@@ -40,7 +46,7 @@ class ProfileController extends Controller
         $user = $this->users->detail($id);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name  = $_POST['name'] ?? $user['name'];
+            $name = $_POST['name'] ?? $user['name'];
             $email = $_POST['email'] ?? $user['email'];
             $phone = $_POST['phone'] ?? $user['phone'];
             $oldimg = $user['img'];
@@ -89,8 +95,8 @@ class ProfileController extends Controller
         $id = $_GET['id'];
         $user = $this->users->detail($id);
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $old_pw  = $_POST['old_pw'] ?? '';
-            $password  = $_POST['password'] ?? '';
+            $old_pw = $_POST['old_pw'] ?? '';
+            $password = $_POST['password'] ?? '';
             $repassword = $_POST['repassword'] ?? '';
             if ($password !== $repassword) {
                 $_SESSION['toast_error'] = 'Hai mật khẩu mới không giống nhau !.';

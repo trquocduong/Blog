@@ -18,7 +18,7 @@ ob_start();
         </div>
     </div>
 
-    <form action="/post/store" method="POST">
+    <form action="/post_store" method="POST" enctype="multipart/form-data">
         <div class="row">
             <div class="col-6 shadow-sm mb-3 p-3 ms-0">
                 <div class="mb-3">
@@ -27,30 +27,40 @@ ob_start();
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputName" class="form-label">Mô tả ngắn</label>
-                    <input type="text" class="form-control" name="description" id="description" aria-describedby=""
-                        style="height:100px">
+                    <textarea type="text" class="form-control" name="description" id="description" aria-describedby=""
+                        style="height:100px"></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputName" class="form-label">Nội dung</label>
-                    <textarea id="editor"></textarea>
+                    <textarea id="editor" name="content"></textarea>
                 </div>
             </div>
             <div class="col-6 shadow-sm mb-3 p-3">
                 <div class="mb-3">
                     <label for="exampleInputName" class="form-label">Ảnh đại diện</label>
-                    <input type="file" class="form-control" name="title" id="title" aria-describedby="">
+                    <input type="file" class="form-control" name="thumbnail" id="thumbnail" aria-describedby="">
                 </div>
                 <div class="row">
                     <div class="col-6">
                         <div class="mb-3">
                             <label for="exampleInputName" class="form-label">Danh mục</label>
-                            <input type="category_id" class="form-control" name="title" id="title" aria-describedby="">
+                            <select class="form-select" name="category_id" aria-label="Default select example">
+                                <option selected>Chọn danh mục</option>
+                                <?php foreach ($category as $cat): ?>
+                                    <option value="<?= $cat['id'] ?>"><?= $cat['name'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="mb-3">
                             <label for="exampleInputName" class="form-label">Thẻ</label>
-                            <input type="tabs" class="form-control" name="title" id="title" aria-describedby="">
+                            <select class="form-control" name="tags[]" aria-label="Default select example">
+                                <option selected>Chọn thẻ</option>
+                                <?php foreach ($tags as $tag): ?>
+                                    <option value="<?= $tag['id'] ?>"><?= $tag['name'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -58,15 +68,16 @@ ob_start();
 
                 <div class="mb-3">
                     <label for="exampleInputName" class="form-label">Meta Title</label>
-                    <input type="text" class="form-control" name="title" id="title" aria-describedby="">
+                    <input type="text" class="form-control" name="seo_title" id="seo_title" aria-describedby="">
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputName" class="form-label">Meta Description</label>
-                    <input type="text" class="form-control" name="description" id="description" aria-describedby="">
+                    <input type="text" class="form-control" name="seo_description" id="seo_description"
+                        aria-describedby="">
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputName" class="form-label">Meta KeyWord</label>
-                    <input type="text" class="form-control" name="description" id="description" aria-describedby="">
+                    <input type="text" class="form-control" name="seo_keywords" id="seo_keywords" aria-describedby="">
                 </div>
                 <hr>
                 <div class="mb-3">

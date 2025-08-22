@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title ="Bài viết của bạn !";
+$title = "Bài viết của bạn !";
 ?>
 <div class="row">
     <?php
@@ -19,18 +19,28 @@ $title ="Bài viết của bạn !";
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>Otto</td>
-                    <td>
-                        <button type="button" class="btn btn-success">Đã Đăng</button>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger">Gỡ Bài</button>
-                    </td>
-                </tr>
+                <?php $i = 0; ?>
+                <?php foreach ($post as $item): ?>
+                    <tr>
+                        <th scope="row"><?= ++$i ?></th>
+                        <td><img src="<?= $item['thumbnail'] ?>" alt="" width="70px" height="50px"></td>
+                        <td><?= htmlspecialchars($item['title']) ?></td>
+                        <td><?= htmlspecialchars($item['author'] ?? 'N/A') ?></td>
+                        <td><?= htmlspecialchars($item['created_at'] ?? '') ?></td>
+                        <td>
+                            <?php if ($item['status'] === 'published'): ?>
+                                <button type="button" class="btn btn-success">Đã Đăng</button>
+                            <?php else: ?>
+                                <button type="button" class="btn btn-secondary">Nháp</button>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger">Gỡ Bài</button>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+
+
             </tbody>
         </table>
     </div>

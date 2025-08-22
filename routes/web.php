@@ -102,7 +102,7 @@ Route::post('/forget_password', 'Client/ProfileController@forget_pw_profile'); /
 
 ///POSTS
 Route::get('/create_post', 'Client/PostController@create'); //get_profile
-
+Route::post('/post_store', 'Client/PostController@store'); //get_profile
 
 Route::get('/{slug}', 'PagesController@getPageBySlug'); // create pages 
 Route::get('/test', 'HomeController@db');//debug database !
